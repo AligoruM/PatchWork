@@ -113,12 +113,14 @@ public class TimeFieldGrid : MonoBehaviour
             player1 = player;
             player1.GetComponent<Transform>().SetParent(cellPath[1].transform, true);
             player1.transform.position = new Vector3(cellPath[1].transform.position.x, cellPath[1].transform.position.y);
+            player1.GetComponent<PlayerButton>().cellNum = cellPath[1].GetComponent<TimeFieldCellScript>().id;
         }
         else
         {
             player2 = player;
             player2.GetComponent<Transform>().SetParent(cellPath[2].transform, true);
             player2.transform.position = new Vector3(cellPath[2].transform.position.x, cellPath[2].transform.position.y);
+            player2.GetComponent<PlayerButton>().cellNum = cellPath[2].GetComponent<TimeFieldCellScript>().id;
         }
     }
 }
