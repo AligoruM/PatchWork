@@ -719,6 +719,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   timeField: {fileID: 1272776793}
   timeFieldGrid: {fileID: 2129604957}
+  player1: {fileID: 0}
+  player2: {fileID: 0}
+  playerPrefab: {fileID: 5171506731185699169, guid: ba0fc47ba12616842a3bda5a8211ec0a,
+    type: 3}
 --- !u!1 &1299846354
 GameObject:
   m_ObjectHideFlags: 0
@@ -754,7 +758,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -21}
+  m_AnchoredPosition: {x: 0, y: -20}
   m_SizeDelta: {x: 500, y: 500}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1299846356
@@ -866,6 +870,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a1749629ac2cfe4583854e4479f5a98, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerSpeed: 0.5
   cellPrefab: {fileID: 1104275793218683251, guid: 3ce13d2952cad0046ad715272245b18c,
     type: 3}
   gridGroup: {fileID: 2129604958}
