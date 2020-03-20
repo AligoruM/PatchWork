@@ -1,4 +1,6 @@
-﻿using System.Collections;
+﻿using System;
+using System.Linq;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -24,7 +26,11 @@ public class TimeFieldGrid : MonoBehaviour
                               34,26,
                               27,28,
                               36,
-                              35}; 
+                              35};
+
+    private int[] cellsWithLeather = {22, 29, 36, 49, 56 };
+    private int[] cellsWithButtons = {7, 13, 19, 26, 33, 39, 45, 53, 60};
+
 
 
     // Start is called before the first frame update
@@ -48,7 +54,7 @@ public class TimeFieldGrid : MonoBehaviour
             GameObject cell = Instantiate(cellPrefab);
             cell.transform.SetParent(gridGroup, false);
 
-            cell.GetComponent<TimeFieldCellScript>().setId(i);
+            cell.GetComponent<TimeFieldCellScript>().id = i;
             cellArray[i] = cell;
         }
 
@@ -61,6 +67,9 @@ public class TimeFieldGrid : MonoBehaviour
         foreach (int i in pathIds)
         {
             cellPath.Add(cellArray[i]);
+
+            cellArray[i].GetComponent<TimeFieldCellScript>().hasButton = cellsWithButtons.Contains(counter);
+            cellArray[i].GetComponent<TimeFieldCellScript>().hasLeather = cellsWithLeather.Contains(counter);
             cellArray[i].GetComponent<Text>().text = counter.ToString();
             counter++;
         }

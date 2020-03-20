@@ -6,7 +6,9 @@ public class TimeFieldCellScript : MonoBehaviour
 {
     public int id;
     public bool hasLeather;
+    public bool isLeatherUsed;
     public bool hasButton;
+    public bool isButtonUsed;
 
     // Start is called before the first frame update
     void Start()
@@ -18,10 +20,5 @@ public class TimeFieldCellScript : MonoBehaviour
     void Update()
     {
         
-    }
-
-    public void setId(int id)
-    {
-        this.id = id;
     }
 }
