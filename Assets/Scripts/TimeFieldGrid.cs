@@ -31,8 +31,8 @@ public class TimeFieldGrid : MonoBehaviour
                               36,
                               35};
 
-    private int[] cellsWithLeather = {22, 29, 36, 49, 56 };
-    private int[] cellsWithButtons = {7, 13, 19, 26, 33, 39, 45, 53, 60};
+    private int[] cellsWithLeather = { 22, 29, 36, 49, 56 };
+    private int[] cellsWithButtons = { 7, 13, 19, 26, 33, 39, 45, 53, 60 };
 
     private GameObject player1;
     private GameObject player2;
@@ -40,7 +40,7 @@ public class TimeFieldGrid : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
@@ -51,28 +51,41 @@ public class TimeFieldGrid : MonoBehaviour
             if (!player2.GetComponent<PlayerButton>().isMoving)
             {
                 int currentCell = player2.GetComponent<PlayerButton>().cellNum;
-                if (currentCell < 63) {
-                    GameObject tmpCell = cellPath[currentCell + 1];
-                    StartCoroutine(SmoothMove(player2, tmpCell, playerSpeed));
+                if (currentCell < 63)
+                {
+                    StartCoroutine(SmoothMove(player2, 10));
                 }
             }
         }
     }
 
-    public IEnumerator SmoothMove(GameObject player, GameObject newCell, float time)
+    public IEnumerator SmoothMove(GameObject player, int cellCount)
     {
+        int targetCellNum = player.GetComponent<PlayerButton>().cellNum + 1;
+        if (targetCellNum < 64)
         {
+            player.GetComponent<PlayerButton>().isMoving = true;
+            GameObject tmpCell = cellPath[player.GetComponent<PlayerButton>().cellNum + 1];
             float currTime = 0;
             do
             {
-                player.transform.position = Vector3.Lerp(player.transform.position, newCell.transform.position, currTime / time);
+                player.transform.position = Vector3.Lerp(player.transform.position, tmpCell.transform.position, currTime / playerSpeed);
                 currTime += Time.deltaTime;
                 yield return null;
             }
-            while (currTime <= time);
-            player.GetComponent<Transform>().SetParent(newCell.transform, true);
-            player.GetComponent<PlayerButton>().cellNum = newCell.GetComponent<TimeFieldCellScript>().id;
+            while (currTime <= playerSpeed);
+            player.GetComponent<Transform>().SetParent(tmpCell.transform, true);
+            player.GetComponent<PlayerButton>().cellNum = tmpCell.GetComponent<TimeFieldCellScript>().id;
+            if (cellCount > 0)
+            {
+                StartCoroutine(SmoothMove(player, cellCount - 1));
+            }
+            else
+            {
+                player.GetComponent<PlayerButton>().isMoving = false;
+            }
         }
+
     }
 
 
@@ -99,7 +112,7 @@ public class TimeFieldGrid : MonoBehaviour
 
             cellArray[i].GetComponent<TimeFieldCellScript>().hasButton = cellsWithButtons.Contains(counter);
             cellArray[i].GetComponent<TimeFieldCellScript>().hasLeather = cellsWithLeather.Contains(counter);
-            cellArray[i].GetComponent<Text>().text = counter.ToString();
+            //cellArray[i].GetComponent<Text>().text = counter.ToString();
             cellArray[i].GetComponent<TimeFieldCellScript>().id = counter;
 
             counter++;
