@@ -4,57 +4,44 @@ using UnityEngine;
 
 public class TilesInteraction : MonoBehaviour
 {
-    public Camera camera;
-    private bool flag = false;
-    //destination point
-    private Vector3 endPoint;
-    //alter this to change the speed of the movement of player / gameobject
-    public float duration = 50.0f;
-    //vertical position of the gameobject
-    private float yAxis;
+    private bool isDragging;
+    private Transform rt;
+    private float maxSize = 0.5f;
+    private Renderer rnd;
+    private Material instMaterial;
 
-    void Start()
+    public void Start()
     {
+        rnd = gameObject.GetComponent<Renderer>();
+        instMaterial = rnd.material;
+        rt = this.GetComponent<Transform>();
     }
 
-    // Update is called once per frame
-    void Update()
+    public void OnMouseDown()
     {
-
-        //check if the screen is touched / clicked
-        if ((Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began) || (Input.GetMouseButtonDown(0)))
+        isDragging = true;
+        instMaterial.SetFloat("_OutlineEnabled", 1);
+        if (rt.localScale.x<maxSize)
         {
-            RaycastHit hit;
-            //Create a Ray on the tapped / clicked position
-            Ray ray;
-
-            ray = camera.ScreenPointToRay(Input.mousePosition);
-            // ray = Camera.main.ScreenPointToRay(Input.GetTouch(0).position);
-
-            //Check if the ray hits any collider
-            if (Physics.Raycast(ray, out hit))
-            {               
-                //set a flag to indicate to move the gameobject
-                flag = true;
-                //save the click / tap position
-                endPoint = hit.point;
-                Debug.Log(endPoint);
-            }
-            Debug.Log(hit.transform.name);
-
+            Debug.Log(rt.localScale.x);
+            Debug.Log(maxSize);
+            
+            rt.localScale += new Vector3(0.14f, 0.14f, 0);
         }
-        //check if the flag for movement is true and the current gameobject position is not same as the clicked / tapped position
-        if (flag && !Mathf.Approximately(gameObject.transform.position.magnitude, endPoint.magnitude))
-        { //&& !(V3Equal(transform.position, endPoint))){
-            //move the gameobject to the desired position
-            gameObject.transform.position = Vector3.Lerp(gameObject.transform.position, endPoint, 1 / (duration * (Vector3.Distance(gameObject.transform.position, endPoint))));
-        }
-        //set the movement indicator flag to false if the endPoint and current gameobject position are equal
-        else if (flag && Mathf.Approximately(gameObject.transform.position.magnitude, endPoint.magnitude))
+    }
+
+    public void OnMouseUp()
+    {
+        isDragging = false;
+        instMaterial.SetFloat("_OutlineEnabled", 0);
+    }
+
+    private void Update()
+    {
+        if (isDragging)
         {
-            flag = false;
-            Debug.Log("I am here");
+            Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position;
+            transform.Translate(mousePosition);
         }
-
     }
 }
