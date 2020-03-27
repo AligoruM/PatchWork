@@ -42,3 +42,9 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Field
+    uniqueID: 892015861
+    locked: 0
+  - name: Players
+    uniqueID: 907245531
+    locked: 0

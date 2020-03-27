@@ -15,13 +15,6 @@ public class PlayerButton : MonoBehaviour {
     // Update is called once per frame
     void Update()
     {
-        updateZPos();
     }
-    //тупой костыль для меня, т.к. впадлу разбираться почему он вечно уезжает в жопу
-    private void updateZPos()
-    {
-        Vector3 pos = transform.position;
-        pos.z = 0;
-        transform.position = pos;
-    }
+
 }
