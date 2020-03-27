@@ -40,6 +40,7 @@ namespace Assets.Scripts
             player1.isActive = true;
             this.tiles = new List<Tile>();
             PrepareListOfTiles();
+            ShowAvailableTiles();
         }
 
         void Update()
@@ -60,8 +61,7 @@ namespace Assets.Scripts
                 }
             }
             else if (stageOfPlayerMove == 1)
-            {
-                ShowAvailableTiles();
+            {                
                 if (player1.isActive)
                 {
                     // put tile on light field 
@@ -71,39 +71,40 @@ namespace Assets.Scripts
                     // put tile on dark field 
                 }
             }
+            // If click on Advance button
             else if (stageOfPlayerMove == 3)
             {
                 if (player1.isActive)
                 {
-                    if (playerChip1.GetComponent<ProgressInScoreBoard>().waypointIndex >
-                        player1.position+ delta)
-                    {
-                        playerChip1.GetComponent<ProgressInScoreBoard>().moveAllowed = false;
-                        player1.position = playerChip1.GetComponent<ProgressInScoreBoard>().waypointIndex - 1;
-                        HideScoreField();
-                        PassTurnToAnotherPlayer();
-                    }
-                    if (playerChip1.GetComponent<ProgressInScoreBoard>().waypointIndex ==
-                        playerChip1.GetComponent<ProgressInScoreBoard>().scoreboardWaypoints.Length)
-                    {
-                        player1.finishOfGame = true;
-                    }
+                    //if (playerChip1.GetComponent<ProgressInScoreBoard>().waypointIndex >
+                    //    player1.position+ delta)
+                    //{
+                    //    playerChip1.GetComponent<ProgressInScoreBoard>().moveAllowed = false;
+                    //    player1.position = playerChip1.GetComponent<ProgressInScoreBoard>().waypointIndex - 1;
+                    //    HideScoreField();
+                    //    PassTurnToAnotherPlayer();
+                    //}
+                    //if (playerChip1.GetComponent<ProgressInScoreBoard>().waypointIndex ==
+                    //    playerChip1.GetComponent<ProgressInScoreBoard>().scoreboardWaypoints.Length)
+                    //{
+                    //    player1.finishOfGame = true;
+                    //}
                 }
                 else
                 {
-                    if (playerChip2.GetComponent<ProgressInScoreBoard>().waypointIndex >
-                        player2.position + delta)
-                    {
-                        playerChip2.GetComponent<ProgressInScoreBoard>().moveAllowed = false;
-                        player2.position = playerChip2.GetComponent<ProgressInScoreBoard>().waypointIndex - 1;
-                        HideScoreField();
-                        PassTurnToAnotherPlayer();
-                    }
-                    if (playerChip2.GetComponent<ProgressInScoreBoard>().waypointIndex ==
-                        playerChip2.GetComponent<ProgressInScoreBoard>().scoreboardWaypoints.Length)
-                    {
-                        player2.finishOfGame = true;
-                    }
+                    //if (playerChip2.GetComponent<ProgressInScoreBoard>().waypointIndex >
+                    //    player2.position + delta)
+                    //{
+                    //    playerChip2.GetComponent<ProgressInScoreBoard>().moveAllowed = false;
+                    //    player2.position = playerChip2.GetComponent<ProgressInScoreBoard>().waypointIndex - 1;
+                    //    HideScoreField();
+                    //    PassTurnToAnotherPlayer();
+                    //}
+                    //if (playerChip2.GetComponent<ProgressInScoreBoard>().waypointIndex ==
+                    //    playerChip2.GetComponent<ProgressInScoreBoard>().scoreboardWaypoints.Length)
+                    //{
+                    //    player2.finishOfGame = true;
+                    //}
                 }                
             }
         }
@@ -144,7 +145,7 @@ namespace Assets.Scripts
         void ShowAvailableTiles()
         {
             List<Tile> avaiableTiles = FindAvailableTiles();
-            float selectScale = 0.34f;
+            float selectScale = 0.36f;
             avaiableTiles[0].tileObject.transform.position = selectTile1Place.transform.position;
             avaiableTiles[1].tileObject.transform.position = selectTile2Place.transform.position;
             avaiableTiles[2].tileObject.transform.position = selectTile3Place.transform.position;
@@ -180,22 +181,22 @@ namespace Assets.Scripts
 
         public void ClickOnAdvanceButton()
         {
+            Debug.Log("ClickOnAdvanceButton");
             stageOfPlayerMove = 3;
             int diffInButtons;
             if (player1.isActive)
             {
-                diffInButtons = player2.position - player1.position + 10;
+                diffInButtons = player2.position - player1.position + 1;
                 player1.numberOfButtons += diffInButtons;
             }
             else
             {
-                diffInButtons = player1.position - player2.position + 10;
+                diffInButtons = player1.position - player2.position + 1;
                 player2.numberOfButtons += diffInButtons;
             }
-            delta = diffInButtons;
+            //delta = diffInButtons;
 
-            ShowScoreField();
-            MovePlayerInScoreField();             
+            ShowScoreField();           
 
         }
 
@@ -206,11 +207,6 @@ namespace Assets.Scripts
             scoreField.SetActive(true);
             allTiles.SetActive(false);
 
-            playerChip1 = GameObject.Find("Player1");
-            playerChip2 = GameObject.Find("Player2");
-
-            playerChip1.GetComponent<ProgressInScoreBoard>().moveAllowed = false;
-            playerChip2.GetComponent<ProgressInScoreBoard>().moveAllowed = false;
         }
 
         private void HideScoreField()
@@ -219,18 +215,6 @@ namespace Assets.Scripts
             advanceCanvas.SetActive(true);
             scoreField.SetActive(false);
             allTiles.SetActive(true);
-        }
-
-        private void MovePlayerInScoreField()
-        {
-            if (player1.isActive)
-            {
-                playerChip1.GetComponent<ProgressInScoreBoard>().moveAllowed = true;
-            }
-            else
-            {
-                playerChip2.GetComponent<ProgressInScoreBoard>().moveAllowed = true;
-            }
         }
 
         private void PassTurnToAnotherPlayer()
