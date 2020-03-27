@@ -140,18 +140,20 @@ namespace Assets.Scripts
                 i++;
             }
             tiles.Shuffle();
+            Debug.Log("PrepareListOfTiles");
         }
 
         void ShowAvailableTiles()
         {
             List<Tile> avaiableTiles = FindAvailableTiles();
+            Debug.Log("ShowAvailableTiles");
             float selectScale = 0.36f;
             avaiableTiles[0].tileObject.transform.position = selectTile1Place.transform.position;
             avaiableTiles[1].tileObject.transform.position = selectTile2Place.transform.position;
             avaiableTiles[2].tileObject.transform.position = selectTile3Place.transform.position;
-            avaiableTiles[0].tileObject.transform.localScale = new Vector3(selectScale, selectScale, selectScale);
-            avaiableTiles[1].tileObject.transform.localScale = new Vector3(selectScale, selectScale, selectScale);
-            avaiableTiles[2].tileObject.transform.localScale = new Vector3(selectScale, selectScale, selectScale);
+            avaiableTiles[0].tileObject.transform.localScale = new Vector3(selectScale, selectScale, 0);
+            avaiableTiles[1].tileObject.transform.localScale = new Vector3(selectScale, selectScale, 0);
+            avaiableTiles[2].tileObject.transform.localScale = new Vector3(selectScale, selectScale, 0);
             foreach (var tile in avaiableTiles)
             {
                 tile.tileObject.gameObject.SetActive(true);
