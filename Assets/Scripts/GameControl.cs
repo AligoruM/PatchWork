@@ -17,7 +17,7 @@ namespace Assets.Scripts
         public GameObject lightField, darkField, scoreField;
         public GameObject selectTileCanvas, advanceCanvas, tileMovementSection, allTiles;
         public GameObject[] tilesObjects;
-        public TextMeshProUGUI playerTurnText;
+        public TextMeshProUGUI playerTurnText, numberOfButtons;
         public Fields fields;
         public GameObject timeFieldGrid;
         private Player player1, player2;
@@ -236,15 +236,19 @@ namespace Assets.Scripts
             if (StaticVariables.player1IsActive)
             {
                 diffInButtons = player2.position - player1.position + 1;
+                player1.position += diffInButtons;
                 player1.numberOfButtons += diffInButtons;
             }
             else
             {
                 diffInButtons = player1.position - player2.position + 1;
+                player2.position += diffInButtons;
                 player2.numberOfButtons += diffInButtons;
             }
 
             ShowScoreField();
+            timeFieldGrid.GetComponent<TimeFieldGrid>().MoveActivePlayer(diffInButtons);
+            PassTurnToAnotherPlayer();
         }
 
         private void ShowScoreField()
@@ -253,9 +257,7 @@ namespace Assets.Scripts
             advanceCanvas.SetActive(false);
             scoreField.SetActive(true);
             allTiles.SetActive(false);
-            timeFieldGrid.SetActive(true);
-
-            timeFieldGrid.GetComponent<TimeFieldGrid>().MoveActivePlayer(1);
+            timeFieldGrid.SetActive(true);            
         }
 
         public void HideScoreField()
@@ -271,14 +273,20 @@ namespace Assets.Scripts
             if (StaticVariables.player1IsActive && (!player2.finishOfGame))
             {
                 StaticVariables.player1IsActive = false;
+                lightField.SetActive(false);
+                darkField.SetActive(true);
                 playerTurnText.text = "Player 2 Turn";
+                numberOfButtons.text = $"{player2.numberOfButtons}";
             }
             else
             {
-                if ((player1.finishOfGame))
+                if (!(player1.finishOfGame))
                 {
                     StaticVariables.player1IsActive = true;
+                    lightField.SetActive(true);
+                    darkField.SetActive(false);
                     playerTurnText.text = "Player 1 Turn";
+                    numberOfButtons.text = $"{player1.numberOfButtons}";
                 }
             }
             stageOfPlayerMove = 1;
@@ -314,6 +322,24 @@ namespace Assets.Scripts
             {
                 avaiableTiles[2].tileObject.transform.Rotate(0, 180, 0);
             }
+        }
+
+        public void ClickAcceptButton()
+        {
+            // Check limits of placement
+
+            // Check avaliable money
+
+            // If all good
+
+            // set parent
+
+            // player active - cost of tile
+
+            // timeFieldGrid.GetComponent<TimeFieldGrid>().MoveActivePlayer(progressOfTile);
+
+            // if progress <= progress of player 2 - PassTurnToAnotherPlayer
+
         }
     }
 }

@@ -11,13 +11,13 @@ public class TimeFieldController : MonoBehaviour
     public GameObject player2;
 
     public GameObject playerPrefab;
-
-
+    public GameObject player2Prefab;
+    
     private void Awake()
     {
         GetTimeFieldGrid().GenerateCells();
         this.player1 = Instantiate(playerPrefab);
-        this.player2 = Instantiate(playerPrefab);
+        this.player2 = Instantiate(player2Prefab);
         GetTimeFieldGrid().AddPlayer(player1);
         GetTimeFieldGrid().AddPlayer(player2);
     }
