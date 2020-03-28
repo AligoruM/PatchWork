@@ -15,14 +15,15 @@ namespace Assets.Scripts
     public class GameControl : MonoBehaviour
     {
         public GameObject lightField, darkField, scoreField;
-        public GameObject selectTileCanvas, advanceCanvas, allTiles;
+        public GameObject selectTileCanvas, advanceCanvas, tileMovementSection, allTiles;
         public GameObject[] tilesObjects;
         public TextMeshProUGUI playerTurnText;
-
+        public Fields fields;
         private Player player1, player2;
         private static GameObject playerChip1, playerChip2;
 
         private List<Tile> tiles;
+        private List<Tile> avaiableTiles;
         private List<CostAndProgress> costs = new List<CostAndProgress>();
         private int firstTilePosition = 0;
 
@@ -34,13 +35,14 @@ namespace Assets.Scripts
 
         void Start()
         {
+            fields = new Fields();
             this.player1 = new Player();
             this.player2 = new Player();
 
-            player1.isActive = true;
+            StaticVariables.player1IsActive = true;
             this.tiles = new List<Tile>();
             PrepareListOfTiles();
-            ShowAvailableTiles();
+            FindAvailableTiles();
         }
 
         void Update()
@@ -61,8 +63,10 @@ namespace Assets.Scripts
                 }
             }
             else if (stageOfPlayerMove == 1)
-            {                
-                if (player1.isActive)
+            {
+                CheckActiveStatusOfAvailableTiles();
+                ShowAvailableTiles();
+                if (StaticVariables.player1IsActive)
                 {
                     // put tile on light field 
                 }
@@ -74,7 +78,7 @@ namespace Assets.Scripts
             // If click on Advance button
             else if (stageOfPlayerMove == 3)
             {
-                if (player1.isActive)
+                if (StaticVariables.player1IsActive)
                 {
                     //if (playerChip1.GetComponent<ProgressInScoreBoard>().waypointIndex >
                     //    player1.position+ delta)
@@ -109,6 +113,34 @@ namespace Assets.Scripts
             }
         }
 
+        int FindActiveTile()
+        {
+            int i = 0;
+            foreach(var tile in avaiableTiles)
+            {
+                if (tile.tileObject.GetComponent<TilesInteraction>().isDragging)
+                {
+                    tile.isActive = true;
+                    break;
+                }
+                i++;
+            }
+            return i;
+        }
+
+        void CheckActiveStatusOfAvailableTiles()
+        {
+            int actTileIndex = FindActiveTile();
+            if (actTileIndex != 3)
+            {
+                for (int i=0; i<avaiableTiles.Count;i++)
+                {
+                    if (i != actTileIndex)
+                        avaiableTiles[i].isActive = false;
+                }
+            }
+        }
+
         void PrepareCostAndProgresses()
         {
             costs.Add(new CostAndProgress { Cost = 1, Progress = 2, Buttons = 0 });
@@ -140,30 +172,44 @@ namespace Assets.Scripts
                 i++;
             }
             tiles.Shuffle();
-            Debug.Log("PrepareListOfTiles");
+            //Debug.Log("PrepareListOfTiles");
         }
 
         void ShowAvailableTiles()
         {
-            List<Tile> avaiableTiles = FindAvailableTiles();
-            Debug.Log("ShowAvailableTiles");
+            //Debug.Log("ShowAvailableTiles");
             float selectScale = 0.36f;
-            avaiableTiles[0].tileObject.transform.position = selectTile1Place.transform.position;
-            avaiableTiles[1].tileObject.transform.position = selectTile2Place.transform.position;
-            avaiableTiles[2].tileObject.transform.position = selectTile3Place.transform.position;
-            avaiableTiles[0].tileObject.transform.localScale = new Vector3(selectScale, selectScale, 0);
-            avaiableTiles[1].tileObject.transform.localScale = new Vector3(selectScale, selectScale, 0);
-            avaiableTiles[2].tileObject.transform.localScale = new Vector3(selectScale, selectScale, 0);
+            if (!avaiableTiles[0].isActive)
+            {
+                avaiableTiles[0].tileObject.transform.position = selectTile1Place.transform.position;
+                avaiableTiles[0].tileObject.transform.localScale = new Vector3(selectScale, selectScale, 0);
+            }
+            if (!avaiableTiles[1].isActive)
+            {
+                avaiableTiles[1].tileObject.transform.position = selectTile2Place.transform.position;
+                avaiableTiles[1].tileObject.transform.localScale = new Vector3(selectScale, selectScale, 0);
+            }
+            if (!avaiableTiles[2].isActive)
+            {
+                avaiableTiles[2].tileObject.transform.position = selectTile3Place.transform.position;
+                avaiableTiles[2].tileObject.transform.localScale = new Vector3(selectScale, selectScale, 0);
+            }
+
+            if (avaiableTiles[0].isActive || avaiableTiles[1].isActive || avaiableTiles[2].isActive)
+            {
+                advanceCanvas.SetActive(false);
+                tileMovementSection.SetActive(true);
+            }
+
             foreach (var tile in avaiableTiles)
             {
                 tile.tileObject.gameObject.SetActive(true);
-
             }
         }
 
-        List<Tile> FindAvailableTiles()
+        private void FindAvailableTiles()
         {
-            List<Tile> avaiableTiles = new List<Tile>();
+            avaiableTiles = new List<Tile>();
             int i = 0;
             while (i < 3)
             {
@@ -178,7 +224,6 @@ namespace Assets.Scripts
                         break;
                 }
             }
-            return avaiableTiles;
         }
 
         public void ClickOnAdvanceButton()
@@ -186,7 +231,7 @@ namespace Assets.Scripts
             Debug.Log("ClickOnAdvanceButton");
             stageOfPlayerMove = 3;
             int diffInButtons;
-            if (player1.isActive)
+            if (StaticVariables.player1IsActive)
             {
                 diffInButtons = player2.position - player1.position + 1;
                 player1.numberOfButtons += diffInButtons;
@@ -196,7 +241,6 @@ namespace Assets.Scripts
                 diffInButtons = player1.position - player2.position + 1;
                 player2.numberOfButtons += diffInButtons;
             }
-            //delta = diffInButtons;
 
             ShowScoreField();           
 
@@ -221,18 +265,16 @@ namespace Assets.Scripts
 
         private void PassTurnToAnotherPlayer()
         {
-            if (player1.isActive && (!player2.finishOfGame))
+            if (StaticVariables.player1IsActive && (!player2.finishOfGame))
             {
-                player1.isActive = false;
-                player2.isActive = true;
+                StaticVariables.player1IsActive = false;
                 playerTurnText.text = "Player 2 Turn";
             }
             else
             {
                 if ((player1.finishOfGame))
                 {
-                    player1.isActive = true;
-                    player2.isActive = false;
+                    StaticVariables.player1IsActive = true;
                     playerTurnText.text = "Player 1 Turn";
                 }
             }

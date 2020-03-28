@@ -14,7 +14,6 @@ namespace Assets.Scripts
 
         public int position;
 
-        public bool isActive;
         public bool finishOfGame;
 
         public Player()
@@ -22,7 +21,6 @@ namespace Assets.Scripts
             this.numberOfButtons = 5;
             this.numberOfButtonsOnField = 0;
             this.position = 0;
-            this.isActive = false;
             this.finishOfGame = false;
         }
     }
