@@ -12,14 +12,20 @@ public class TimeFieldController : MonoBehaviour
 
     public GameObject playerPrefab;
 
-    // Start is called before the first frame update
-    void Start()
+
+    private void Awake()
     {
         GetTimeFieldGrid().GenerateCells();
         this.player1 = Instantiate(playerPrefab);
         this.player2 = Instantiate(playerPrefab);
         GetTimeFieldGrid().AddPlayer(player1);
         GetTimeFieldGrid().AddPlayer(player2);
+    }
+
+    // Start is called before the first frame update
+    void Start()
+    {
+
     }
 
     // Update is called once per frame

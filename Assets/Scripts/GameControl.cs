@@ -254,7 +254,7 @@ namespace Assets.Scripts
             scoreField.SetActive(true);
             allTiles.SetActive(false);
             timeFieldGrid.SetActive(true);
-            
+
             timeFieldGrid.GetComponent<TimeFieldGrid>().MoveActivePlayer(1);
         }
 
