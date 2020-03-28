@@ -4873,6 +4873,7 @@ MonoBehaviour:
   - {fileID: 173163685}
   - {fileID: 1530396358}
   playerTurnText: {fileID: 1574007725}
+  timeFieldGrid: {fileID: 2129604957}
   selectTile1Place: {fileID: 127581944}
   selectTile2Place: {fileID: 430470423}
   selectTile3Place: {fileID: 1953482393}
@@ -12487,11 +12488,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a1749629ac2cfe4583854e4479f5a98, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerSpeed: 0.5
+  playerSpeed: 0.25
+  timeBeforeDisable: 1
   cellPrefab: {fileID: 1104275793218683251, guid: 3ce13d2952cad0046ad715272245b18c,
     type: 3}
   gridGroup: {fileID: 2129604958}
-  cellPath: []
+  gameContoller: {fileID: 886833664}
 --- !u!1 &2130556344
 GameObject:
   m_ObjectHideFlags: 0

@@ -19,6 +19,7 @@ namespace Assets.Scripts
         public GameObject[] tilesObjects;
         public TextMeshProUGUI playerTurnText;
         public Fields fields;
+        public GameObject timeFieldGrid;
         private Player player1, player2;
         private static GameObject playerChip1, playerChip2;
 
@@ -43,6 +44,7 @@ namespace Assets.Scripts
             this.tiles = new List<Tile>();
             PrepareListOfTiles();
             FindAvailableTiles();
+            HideScoreField();
         }
 
         void Update()
@@ -242,8 +244,7 @@ namespace Assets.Scripts
                 player2.numberOfButtons += diffInButtons;
             }
 
-            ShowScoreField();           
-
+            ShowScoreField();
         }
 
         private void ShowScoreField()
@@ -252,10 +253,12 @@ namespace Assets.Scripts
             advanceCanvas.SetActive(false);
             scoreField.SetActive(true);
             allTiles.SetActive(false);
-
+            timeFieldGrid.SetActive(true);
+            
+            timeFieldGrid.GetComponent<TimeFieldGrid>().MoveActivePlayer(1);
         }
 
-        private void HideScoreField()
+        public void HideScoreField()
         {
             selectTileCanvas.SetActive(true);
             advanceCanvas.SetActive(true);
