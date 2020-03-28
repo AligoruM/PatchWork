@@ -4,17 +4,21 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Assets.Scripts;
 
 public class TimeFieldGrid : MonoBehaviour
 {
-    [Range(0.5f, 2.0f)]
-    public float playerSpeed = 0.5f;
-
-    private const int cellCount = 64;
+    [Range(0.1f, 1.0f)]
+    public float playerSpeed = 0.1f;
+    [Range(0.5f, 5.0f)]
+    public float timeBeforeDisable = 1f;
     public GameObject cellPrefab;
     public Transform gridGroup;
+    public GameObject gameContoller;
+
+    private const int cellCount = 64;
     private GameObject[] cellArray = new GameObject[cellCount];
-    public List<GameObject> cellPath = new List<GameObject>();
+    private List<GameObject> cellPath = new List<GameObject>();
     private int[] pathIds = { 0, 1, 2, 3, 4, 5, 6, 7,
                               15,23,31,39,47,55,63,
                               62,61,60,59,58,57,56,
@@ -48,15 +52,34 @@ public class TimeFieldGrid : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.D))
         {
-            if (!player2.GetComponent<PlayerButton>().isMoving)
+            GameObject playerToMove = StaticVariables.player1IsActive ? player1 : player2; 
+            if (!playerToMove.GetComponent<PlayerButton>().isMoving)
             {
-                int currentCell = player2.GetComponent<PlayerButton>().cellNum;
+                int currentCell = playerToMove.GetComponent<PlayerButton>().cellNum;
                 if (currentCell < 63)
                 {
-                    StartCoroutine(SmoothMove(player2, 10));
+                    StartCoroutine(SmoothMove(playerToMove, 2));
                 }
             }
         }
+    }
+
+    public void MoveActivePlayer(int cellCount)
+    {
+        GameObject playerToMove = StaticVariables.player1IsActive ? player1 : player2;
+        if (!playerToMove.GetComponent<PlayerButton>().isMoving)
+        {
+            int currentCell = playerToMove.GetComponent<PlayerButton>().cellNum;
+            if (currentCell < 63)
+            {
+                StartCoroutine(SmoothMove(playerToMove, cellCount));
+            }
+        }
+    }
+
+    public void MovePlayer(GameObject player, int cellcount)
+    {
+
     }
 
     public IEnumerator SmoothMove(GameObject player, int cellCount)
@@ -64,8 +87,9 @@ public class TimeFieldGrid : MonoBehaviour
         int targetCellNum = player.GetComponent<PlayerButton>().cellNum + 1;
         if (targetCellNum < 64)
         {
-            player.GetComponent<PlayerButton>().isMoving = true;
-            GameObject tmpCell = cellPath[player.GetComponent<PlayerButton>().cellNum + 1];
+            PlayerButton playerButton = player.GetComponent<PlayerButton>();
+            playerButton.isMoving = true;
+            GameObject tmpCell = getTargetCell(playerButton);
             float currTime = 0;
             do
             {
@@ -75,19 +99,44 @@ public class TimeFieldGrid : MonoBehaviour
             }
             while (currTime <= playerSpeed);
             player.GetComponent<Transform>().SetParent(tmpCell.transform, true);
-            player.GetComponent<PlayerButton>().cellNum = tmpCell.GetComponent<TimeFieldCellScript>().id;
-            if (cellCount > 0)
+            playerButton.cellNum = tmpCell.GetComponent<TimeFieldCellScript>().id;
+            if (cellCount > 1)
             {
                 StartCoroutine(SmoothMove(player, cellCount - 1));
             }
             else
             {
-                player.GetComponent<PlayerButton>().isMoving = false;
+                StartCoroutine(WaitAndDisableTimeFeild(timeBeforeDisable, player));
             }
         }
 
     }
 
+    private GameObject getTargetCell(PlayerButton playerButton)
+    {
+        GameObject tmpCell;
+        int currentCellId = playerButton.cellNum;
+        if (cellsWithLeather.Contains(currentCellId + 1) || currentCellId == 0 || currentCellId == 1)
+        {
+            tmpCell = cellPath[currentCellId + 2];
+        } else
+        {
+            tmpCell = cellPath[currentCellId + 1];
+        }
+        return tmpCell;
+    }
+
+    public IEnumerator WaitAndDisableTimeFeild(float time, GameObject player)
+    {
+        yield return new WaitForSeconds(time);
+        player.GetComponent<PlayerButton>().isMoving = false;
+        DisableField();
+    }
+
+    private void DisableField()
+    {
+        gameContoller.GetComponent<GameControl>().HideScoreField();
+    }
 
 
     public void GenerateCells()
