@@ -82,7 +82,7 @@ namespace Assets.Scripts
             if (isDragging)
             {
                 Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position;
-                transform.Translate(mousePosition);
+                transform.Translate(mousePosition, Space.World);
             }
         }
 
