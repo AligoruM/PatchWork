@@ -280,5 +280,37 @@ namespace Assets.Scripts
             }
             stageOfPlayerMove = 1;
         }
+
+        public void RotateActiveTile()
+        {
+            if (avaiableTiles[0].isActive)
+            {
+                avaiableTiles[0].tileObject.transform.Rotate(0, 0, -90);
+            }
+            if (avaiableTiles[1].isActive)
+            {
+                avaiableTiles[1].tileObject.transform.Rotate(0, 0, -90);
+            }
+            if (avaiableTiles[2].isActive)
+            {
+                avaiableTiles[2].tileObject.transform.Rotate(0, 0, -90);
+            }
+        }
+
+        public void FlipActiveTile()
+        {
+            if (avaiableTiles[0].isActive)
+            {
+                avaiableTiles[0].tileObject.transform.Rotate(0, 180, 0);
+            }
+            if (avaiableTiles[1].isActive)
+            {
+                avaiableTiles[1].tileObject.transform.Rotate(0, 180, 0);
+            }
+            if (avaiableTiles[2].isActive)
+            {
+                avaiableTiles[2].tileObject.transform.Rotate(0, 180, 0);
+            }
+        }
     }
 }
