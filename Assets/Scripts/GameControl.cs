@@ -215,9 +215,10 @@ namespace Assets.Scripts
 
             avaiableTiles = new List<Tile>();
             int i = 0;
+            int skipPos = firstTilePosition;
             while (i < 3)
             {
-                foreach (var tile in tiles.Skip(firstTilePosition))
+                foreach (var tile in tiles.Skip(skipPos))
                 {
                     if (!tile.isUsed)
                     {
@@ -227,6 +228,7 @@ namespace Assets.Scripts
                     if (i == 3)
                         break;
                 }
+                skipPos = 0;
             }
         }
 
