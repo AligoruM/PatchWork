@@ -6,7 +6,7 @@ using UnityEngine;
 public class ButtonPopupScript : MonoBehaviour
 {
     private TextMeshProUGUI textMesh;
-    private float disappearTimer = 2f;
+    private float disappearTimer = 1f;
     private float moveYSpeed = 0.5f;
 
     private void Awake()
