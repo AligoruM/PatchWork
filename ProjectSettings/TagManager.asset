@@ -49,3 +49,6 @@ TagManager:
   - name: Players
     uniqueID: 907245531
     locked: 0
+  - name: StartWindow
+    uniqueID: 2962107913
+    locked: 0
