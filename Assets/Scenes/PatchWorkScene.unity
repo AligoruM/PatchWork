@@ -2603,7 +2603,7 @@ MonoBehaviour:
   m_firstVisibleCharacter: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: -8.942985, z: 0, w: 0}
+  m_margin: {x: 0, y: -8.942985, z: -10, w: 0}
   m_textInfo:
     textComponent: {fileID: 368636476}
     characterCount: 1
@@ -17560,6 +17560,8 @@ MonoBehaviour:
   playerSpeed: 0.25
   timeBeforeDisable: 1
   cellPrefab: {fileID: 1104275793218683251, guid: 3ce13d2952cad0046ad715272245b18c,
+    type: 3}
+  buttonPopupPrefab: {fileID: 7653195613948274470, guid: 358ea97f09f687c43b84f641aba596ac,
     type: 3}
   gridGroup: {fileID: 2129604958}
   gameContoller: {fileID: 886833664}
