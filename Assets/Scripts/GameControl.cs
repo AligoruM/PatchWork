@@ -121,6 +121,22 @@ namespace Assets.Scripts
             costs.Add(new CostAndProgress { Cost = 1, Progress = 2, Buttons = 0 });
             costs.Add(new CostAndProgress { Cost = 10, Progress = 4, Buttons = 3 });
             costs.Add(new CostAndProgress { Cost = 10, Progress = 5, Buttons = 3 });
+            costs.Add(new CostAndProgress { Cost = 2, Progress = 2, Buttons = 0 });
+            costs.Add(new CostAndProgress { Cost = 10, Progress = 3, Buttons = 2 });
+            costs.Add(new CostAndProgress { Cost = 1, Progress = 5, Buttons = 1 });
+            costs.Add(new CostAndProgress { Cost = 0, Progress = 3, Buttons = 1 });
+            costs.Add(new CostAndProgress { Cost = 7, Progress = 4, Buttons = 2 });
+            costs.Add(new CostAndProgress { Cost = 6, Progress = 5, Buttons = 2 });
+            costs.Add(new CostAndProgress { Cost = 3, Progress = 4, Buttons = 1 });
+            costs.Add(new CostAndProgress { Cost = 7, Progress = 6, Buttons = 3 });
+            costs.Add(new CostAndProgress { Cost = 2, Progress = 1, Buttons = 0 });
+            costs.Add(new CostAndProgress { Cost = 1, Progress = 3, Buttons = 0 });
+            costs.Add(new CostAndProgress { Cost = 1, Progress = 4, Buttons = 1 });
+            costs.Add(new CostAndProgress { Cost = 2, Progress = 1, Buttons = 0 });
+            costs.Add(new CostAndProgress { Cost = 3, Progress = 1, Buttons = 0 });
+            costs.Add(new CostAndProgress { Cost = 4, Progress = 2, Buttons = 1 });
+            costs.Add(new CostAndProgress { Cost = 2, Progress = 3, Buttons = 1 });
+            costs.Add(new CostAndProgress { Cost = 3, Progress = 2, Buttons = 1 });
         }
 
         void PrepareListOfTiles()
