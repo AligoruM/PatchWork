@@ -10,8 +10,8 @@ public class TimeFieldGrid : MonoBehaviour
 {
     [Range(0.1f, 1.0f)]
     public float playerSpeed = 0.1f;
-    [Range(0.5f, 5.0f)]
-    public float timeBeforeDisable = 1f;
+    [Range(0.5f, 8.0f)]
+    public float timeBeforeDisable = 4f;
     public GameObject cellPrefab;
     public Transform gridGroup;
     public GameObject gameContoller;
@@ -100,6 +100,10 @@ public class TimeFieldGrid : MonoBehaviour
             while (currTime <= playerSpeed);
             player.GetComponent<Transform>().SetParent(tmpCell.transform, true);
             playerButton.cellNum = tmpCell.GetComponent<TimeFieldCellScript>().id;
+            if (cellsWithButtons.Contains(playerButton.cellNum))
+            {
+                gameContoller.GetComponent<GameControl>().ActivePlayerGetButtonsFromField();
+            }
             if (cellCount > 1)
             {
                 StartCoroutine(SmoothMove(player, cellCount - 1));
@@ -131,6 +135,7 @@ public class TimeFieldGrid : MonoBehaviour
         yield return new WaitForSeconds(time);
         player.GetComponent<PlayerButton>().isMoving = false;
         DisableField();
+        gameContoller.GetComponent<GameControl>().PassTurnToAnotherPlayer();
     }
 
     private void DisableField()

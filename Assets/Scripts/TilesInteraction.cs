@@ -25,6 +25,7 @@ namespace Assets.Scripts
         public void OnMouseDown()
         {
             isDragging = true;
+            rnd.sortingOrder = 50;
             instMaterial.SetFloat("_OutlineEnabled", 1);
             if (rt.localScale.x < maxSize)
             {
@@ -38,6 +39,7 @@ namespace Assets.Scripts
         public void OnMouseUp()
         {
             isDragging = false;
+            rnd.sortingOrder = 38;
             instMaterial.SetFloat("_OutlineEnabled", 0);
             float minDistance = 5000;
             List<GameObject> cells = new List<GameObject>(GameObject.FindGameObjectsWithTag("Cell"));
