@@ -10,8 +10,8 @@ public class TimeFieldGrid : MonoBehaviour
 {
     [Range(0.1f, 1.0f)]
     public float playerSpeed = 0.1f;
-    [Range(0.5f, 8.0f)]
-    public float timeBeforeDisable = 4f;
+    [Range(0.5f, 10.0f)]
+    public float timeBeforeDisable = 6.5f;
     public GameObject cellPrefab;
     public Transform gridGroup;
     public GameObject gameContoller;

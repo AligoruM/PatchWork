@@ -15,6 +15,7 @@ namespace Assets.Scripts
 
     public class GameControl : MonoBehaviour
     {
+        public GameObject startNewGameWindow;
         public GameObject lightField, darkField, scoreField;
         public GameObject selectTileCanvas, advanceCanvas, tileMovementSection, allTiles, warningMessage;
         public GameObject[] tilesObjects;
@@ -451,6 +452,11 @@ namespace Assets.Scripts
                 playerTurnText.text = "Player 2 Turn";
                 playerTurnText.faceColor = new Color32(59, 123, 191, 255);
             }
+        }
+
+        public void StartNewGame()
+        {
+            startNewGameWindow.SetActive(false);
         }
 
     }
