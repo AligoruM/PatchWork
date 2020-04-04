@@ -143,16 +143,31 @@ namespace Assets.Scripts
             {
                 avaiableTiles[0].tileObject.transform.position = selectTile1Place.transform.position;
                 avaiableTiles[0].tileObject.transform.localScale = new Vector3(selectScale, selectScale, 0);
+                selectTile1Place.GetComponentInChildren<TextMeshProUGUI>().SetText(string.Format("Progress: {0}\nCost: {1}",  avaiableTiles[0].progressCost, avaiableTiles[0].buttonCost));
+            }
+            else
+            {
+                selectTile1Place.GetComponentInChildren<TextMeshProUGUI>().SetText(string.Empty);
             }
             if (!avaiableTiles[1].isActive)
             {
                 avaiableTiles[1].tileObject.transform.position = selectTile2Place.transform.position;
                 avaiableTiles[1].tileObject.transform.localScale = new Vector3(selectScale, selectScale, 0);
+                selectTile2Place.GetComponentInChildren<TextMeshProUGUI>().SetText(string.Format("Progress: {0}\nCost: {1}", avaiableTiles[1].progressCost, avaiableTiles[1].buttonCost));
+            }
+            else
+            {
+                selectTile2Place.GetComponentInChildren<TextMeshProUGUI>().SetText(string.Empty);
             }
             if (!avaiableTiles[2].isActive)
             {
                 avaiableTiles[2].tileObject.transform.position = selectTile3Place.transform.position;
                 avaiableTiles[2].tileObject.transform.localScale = new Vector3(selectScale, selectScale, 0);
+                selectTile3Place.GetComponentInChildren<TextMeshProUGUI>().SetText(string.Format("Progress: {0}\nCost: {1}", avaiableTiles[2].progressCost, avaiableTiles[2].buttonCost));
+            }
+            else
+            {
+                selectTile3Place.GetComponentInChildren<TextMeshProUGUI>().SetText(string.Empty);
             }
 
             if (avaiableTiles[0].isActive || avaiableTiles[1].isActive || avaiableTiles[2].isActive)
