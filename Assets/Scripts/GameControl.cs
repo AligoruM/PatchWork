@@ -15,9 +15,9 @@ namespace Assets.Scripts
     public class GameControl : MonoBehaviour
     {
         public GameObject lightField, darkField, scoreField;
-        public GameObject selectTileCanvas, advanceCanvas, tileMovementSection, allTiles;
+        public GameObject selectTileCanvas, advanceCanvas, tileMovementSection, allTiles, warningMessage;
         public GameObject[] tilesObjects;
-        public TextMeshProUGUI playerTurnText, numberOfButtons;
+        public TextMeshProUGUI playerTurnText, numberOfButtons, warningText;
         public Fields fields;
         public GameObject timeFieldGrid;
         private Player player1, player2;
@@ -31,8 +31,6 @@ namespace Assets.Scripts
         public GameObject selectTile1Place, selectTile2Place, selectTile3Place;
 
         private int stageOfPlayerMove = 1;
-
-        private int delta = 0;
 
         void Start()
         {
@@ -174,12 +172,10 @@ namespace Assets.Scripts
                 i++;
             }
             tiles.Shuffle();
-            //Debug.Log("PrepareListOfTiles");
         }
 
         void ShowAvailableTiles()
         {
-            //Debug.Log("ShowAvailableTiles");
             float selectScale = 0.36f;
             if (!avaiableTiles[0].isActive)
             {
@@ -211,6 +207,14 @@ namespace Assets.Scripts
 
         private void FindAvailableTiles()
         {
+            foreach (var tile in tiles)
+            {
+                if (!tile.isUsed)
+                {
+                    tile.tileObject.SetActive(false);
+                }
+            }
+
             avaiableTiles = new List<Tile>();
             int i = 0;
             while (i < 3)
@@ -270,23 +274,28 @@ namespace Assets.Scripts
 
         private void PassTurnToAnotherPlayer()
         {
-            if (StaticVariables.player1IsActive && (!player2.finishOfGame))
+            if (StaticVariables.player1IsActive && !player2.finishOfGame)
             {
-                StaticVariables.player1IsActive = false;
-                lightField.SetActive(false);
-                darkField.SetActive(true);
-                playerTurnText.text = "Player 2 Turn";
-                numberOfButtons.text = $"{player2.numberOfButtons}";
+                if (player1.position > player2.position)
+                {
+                    StaticVariables.player1IsActive = false;
+                    lightField.SetActive(false);
+                    darkField.SetActive(true);
+                    playerTurnText.text = "Player 2 Turn";
+                    numberOfButtons.text = $"{player2.numberOfButtons}";
+                    FindAvailableTiles();
+                }
             }
-            else
+            else if (!StaticVariables.player1IsActive && !player1.finishOfGame)
             {
-                if (!(player1.finishOfGame))
+                if (player2.position > player1.position)
                 {
                     StaticVariables.player1IsActive = true;
                     lightField.SetActive(true);
                     darkField.SetActive(false);
                     playerTurnText.text = "Player 1 Turn";
                     numberOfButtons.text = $"{player1.numberOfButtons}";
+                    FindAvailableTiles();
                 }
             }
             stageOfPlayerMove = 1;
@@ -326,20 +335,83 @@ namespace Assets.Scripts
 
         public void ClickAcceptButton()
         {
+
+            int deltaPos = 0;
+            if (avaiableTiles[0].isActive)
+            {
+                deltaPos = 1;
+            }
+            if (avaiableTiles[1].isActive)
+            {
+                deltaPos = 2;
+            }
+            if (avaiableTiles[2].isActive)
+            {
+                deltaPos = 3;
+            }
+            var acceptTile = avaiableTiles.Where(tile => tile.isActive).First();
+
             // Check limits of placement
 
             // Check avaliable money
+            if (StaticVariables.player1IsActive)
+            {
+                if (acceptTile.buttonCost > player1.numberOfButtons)
+                {
+                    warningMessage.SetActive(true);
+                    warningText.text = $"You don't have enough buttons to but this tile!";
+                }
+                else
+                {
+                    // If all good
+                    ChangeFirstAvailableTile(deltaPos);
+                    tileMovementSection.SetActive(false);
+                    player1.numberOfButtons -= acceptTile.buttonCost;
+                    player1.position += acceptTile.progressCost;
+                    player1.numberOfButtonsOnField += acceptTile.buttonsOnTile;
+                    acceptTile.isUsed = true;
+                    acceptTile.isActive = false;
+                    acceptTile.tileObject.transform.SetParent(lightField.transform);
 
-            // If all good
+                    ShowScoreField();
+                    timeFieldGrid.GetComponent<TimeFieldGrid>().MoveActivePlayer(acceptTile.progressCost);
+                    PassTurnToAnotherPlayer();
+                }
+            }
+            else
+            {
+                if (acceptTile.buttonCost > player2.numberOfButtons)
+                {
+                    warningMessage.SetActive(true);
+                    warningText.text = $"You don't have enough buttons to but this tile!";
+                }
+                else
+                {
+                    // If all good
+                    ChangeFirstAvailableTile(deltaPos);
+                    tileMovementSection.SetActive(false);
+                    player2.numberOfButtons -= acceptTile.buttonCost;
+                    player2.position += acceptTile.progressCost;
+                    player2.numberOfButtonsOnField += acceptTile.buttonsOnTile;
+                    acceptTile.isUsed = true;
+                    acceptTile.isActive = false;
+                    acceptTile.tileObject.transform.SetParent(darkField.transform);
 
-            // set parent
+                    ShowScoreField();
+                    timeFieldGrid.GetComponent<TimeFieldGrid>().MoveActivePlayer(acceptTile.progressCost);
+                    PassTurnToAnotherPlayer();
+                }
+            }
+        }
 
-            // player active - cost of tile
+        public void ChangeFirstAvailableTile(int posOfAcceptTile)
+        {
+            firstTilePosition = (int)((firstTilePosition + posOfAcceptTile) % tiles.Count);
+        }
 
-            // timeFieldGrid.GetComponent<TimeFieldGrid>().MoveActivePlayer(progressOfTile);
-
-            // if progress <= progress of player 2 - PassTurnToAnotherPlayer
-
+        public void ClickOkInWarningMessage()
+        {
+            warningMessage.SetActive(false);
         }
     }
 }

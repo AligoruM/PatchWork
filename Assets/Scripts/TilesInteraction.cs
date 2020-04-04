@@ -39,41 +39,34 @@ namespace Assets.Scripts
         {
             isDragging = false;
             instMaterial.SetFloat("_OutlineEnabled", 0);
-            if (StaticVariables.player1IsActive)
+            float minDistance = 5000;
+            List<GameObject> cells = new List<GameObject>(GameObject.FindGameObjectsWithTag("Cell"));
+            int indOfGoodCell = 0;
+            int i = 0;
+            foreach (var cell in cells)
             {
-                float minDistance = 5000;
-                List<GameObject> cells = new List<GameObject>(GameObject.FindGameObjectsWithTag("Cell"));
-                int indOfGoodCell = 0;
-                int i = 0;
-                foreach (var cell in cells)
-                {
-                    var tilePos = GetTopLeft(transform);
-                    var cellPos = cell.transform.position;
-                    cellPos.x -= cell.GetComponent<RectTransform>().rect.width / 2;
-                    cellPos.y += cell.GetComponent<RectTransform>().rect.height / 2;
+                var tilePos = GetTopLeft(transform);
+                var cellPos = cell.transform.position;
+                cellPos.x -= cell.GetComponent<RectTransform>().rect.width / 2;
+                cellPos.y += cell.GetComponent<RectTransform>().rect.height / 2;
 
-                    var dist = Math.Abs(Vector3.Distance(tilePos, cellPos));
-                    if (dist< minDistance)
-                    {
-                        minDistance = dist;
-                        indOfGoodCell = i;
-                    }
-                    i++;
-                }
-                if (minDistance < 2.5f)
+                var dist = Math.Abs(Vector3.Distance(tilePos, cellPos));
+                if (dist< minDistance)
                 {
-                    var bestPos = cells[indOfGoodCell].transform.position;
-                    bestPos.x -= cells[indOfGoodCell].GetComponent<RectTransform>().rect.width / 3 * 2;
-                    bestPos.y += cells[indOfGoodCell].GetComponent<RectTransform>().rect.height / 3 * 2;
-                    float width = transform.GetComponent<Renderer>().bounds.size.x;
-                    float height = transform.GetComponent<Renderer>().bounds.size.y;
-                    bestPos = new Vector3(bestPos.x + width / 2, bestPos.y - height / 2, bestPos.z);
-                    transform.position = bestPos;
+                    minDistance = dist;
+                    indOfGoodCell = i;
                 }
+                i++;
             }
-            else
+            if (minDistance < 2.5f)
             {
-
+                var bestPos = cells[indOfGoodCell].transform.position;
+                bestPos.x -= cells[indOfGoodCell].GetComponent<RectTransform>().rect.width / 3 * 2;
+                bestPos.y += cells[indOfGoodCell].GetComponent<RectTransform>().rect.height / 3 * 2;
+                float width = transform.GetComponent<Renderer>().bounds.size.x;
+                float height = transform.GetComponent<Renderer>().bounds.size.y;
+                bestPos = new Vector3(bestPos.x + width / 2, bestPos.y - height / 2, bestPos.z);
+                transform.position = bestPos;
             }
         }
 
