@@ -13,6 +13,7 @@ public class TimeFieldGrid : MonoBehaviour
     [Range(0.5f, 10.0f)]
     public float timeBeforeDisable = 6.5f;
     public GameObject cellPrefab;
+    public GameObject buttonPopupPrefab;
     public Transform gridGroup;
     public GameObject gameContoller;
 
@@ -77,11 +78,6 @@ public class TimeFieldGrid : MonoBehaviour
         }
     }
 
-    public void MovePlayer(GameObject player, int cellcount)
-    {
-
-    }
-
     public IEnumerator SmoothMove(GameObject player, int cellCount)
     {
         int targetCellNum = player.GetComponent<PlayerButton>().cellNum + 1;
@@ -102,7 +98,8 @@ public class TimeFieldGrid : MonoBehaviour
             playerButton.cellNum = tmpCell.GetComponent<TimeFieldCellScript>().id;
             if (cellsWithButtons.Contains(playerButton.cellNum))
             {
-                gameContoller.GetComponent<GameControl>().ActivePlayerGetButtonsFromField();
+                int numberOfButtons = gameContoller.GetComponent<GameControl>().ActivePlayerGetButtonsFromField();
+                createButtonPopup(numberOfButtons, tmpCell);
             }
             if (cellCount > 1)
             {
@@ -189,5 +186,16 @@ public class TimeFieldGrid : MonoBehaviour
             player2.transform.position = new Vector3(cellPath[2].transform.position.x, cellPath[2].transform.position.y);
             player2.GetComponent<PlayerButton>().cellNum = cellPath[2].GetComponent<TimeFieldCellScript>().id;
         }
+    }
+
+    private ButtonPopupScript createButtonPopup(int amount, GameObject cell)
+    {
+        GameObject buttonPopup = Instantiate(buttonPopupPrefab);
+        buttonPopup.GetComponent<Transform>().SetParent(cell.transform);
+        buttonPopup.GetComponent<Transform>().position = cell.transform.position;
+        buttonPopup.GetComponent<Transform>().localScale = new Vector3(15, 15, 1);
+        ButtonPopupScript buttonPopupScript = buttonPopup.GetComponent<ButtonPopupScript>();
+        buttonPopupScript.Setup(amount);
+        return buttonPopupScript;
     }
 }

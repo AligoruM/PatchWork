@@ -405,16 +405,20 @@ namespace Assets.Scripts
             warningMessage.SetActive(false);
         }
 
-        public void ActivePlayerGetButtonsFromField()
+        public int ActivePlayerGetButtonsFromField()
         {
+            int numberOfButtons;
             if (StaticVariables.player1IsActive)
             {
                 player1.numberOfButtons += player1.numberOfButtonsOnField;
+                numberOfButtons = player1.numberOfButtonsOnField;
             }
             else
             {
                 player2.numberOfButtons += player2.numberOfButtonsOnField;
+                numberOfButtons = player2.numberOfButtonsOnField;
             }
+            return numberOfButtons;
         }
 
         public void ShowScoreFieldButton()

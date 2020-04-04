@@ -16,7 +16,7 @@ PrefabInstance:
     - target: {fileID: 5171506731185699169, guid: ba0fc47ba12616842a3bda5a8211ec0a,
         type: 3}
       propertyPath: m_Name
-      value: PlayerButton2
+      value: PlayerButton2 Variant
       objectReference: {fileID: 0}
     - target: {fileID: 8964010225749537957, guid: ba0fc47ba12616842a3bda5a8211ec0a,
         type: 3}
