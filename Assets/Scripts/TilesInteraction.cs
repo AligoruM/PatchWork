@@ -24,60 +24,66 @@ namespace Assets.Scripts
 
         public void OnMouseDown()
         {
-            isDragging = true;
-            rnd.sortingOrder = 50;
-            instMaterial.SetFloat("_OutlineEnabled", 1);
-            if (rt.localScale.x < maxSize)
+            if (!transform.parent.name.Equals("LightField") && !transform.parent.name.Equals("DarkField"))
             {
-                Debug.Log(rt.localScale.x);
-                Debug.Log(maxSize);
-
-                rt.localScale += new Vector3(0.14f, 0.14f, 0);
+                isDragging = true;
+                rnd.sortingOrder = 50;
+                instMaterial.SetFloat("_OutlineEnabled", 1);
+                if (rt.localScale.x < maxSize)
+                {
+                    rt.localScale += new Vector3(0.14f, 0.14f, 0);
+                }
             }
         }
 
         public void OnMouseUp()
         {
-            isDragging = false;
-            rnd.sortingOrder = 38;
-            instMaterial.SetFloat("_OutlineEnabled", 0);
-            float minDistance = 5000;
-            List<GameObject> cells = new List<GameObject>(GameObject.FindGameObjectsWithTag("Cell"));
-            int indOfGoodCell = 0;
-            int i = 0;
-            foreach (var cell in cells)
+            if (!transform.parent.name.Equals("LightField") && !transform.parent.name.Equals("DarkField"))
             {
-                var tilePos = GetTopLeft(transform);
-                var cellPos = cell.transform.position;
-                cellPos.x -= cell.GetComponent<RectTransform>().rect.width / 2;
-                cellPos.y += cell.GetComponent<RectTransform>().rect.height / 2;
-
-                var dist = Math.Abs(Vector3.Distance(tilePos, cellPos));
-                if (dist< minDistance)
+                isDragging = false;
+                rnd.sortingOrder = 38;
+                instMaterial.SetFloat("_OutlineEnabled", 0);
+                float minDistance = 5000;
+                List<GameObject> cells = new List<GameObject>(GameObject.FindGameObjectsWithTag("Cell"));
+                int indOfGoodCell = 0;
+                int i = 0;
+                foreach (var cell in cells)
                 {
-                    minDistance = dist;
-                    indOfGoodCell = i;
+                    var tilePos = GetTopLeft(transform);
+                    var cellPos = cell.transform.position;
+                    cellPos.x -= cell.GetComponent<RectTransform>().rect.width / 2;
+                    cellPos.y += cell.GetComponent<RectTransform>().rect.height / 2;
+
+                    var dist = Math.Abs(Vector3.Distance(tilePos, cellPos));
+                    if (dist < minDistance)
+                    {
+                        minDistance = dist;
+                        indOfGoodCell = i;
+                    }
+                    i++;
                 }
-                i++;
-            }
-            if (minDistance < 2.5f)
-            {
-                var bestPos = cells[indOfGoodCell].transform.position;
-                bestPos.x -= cells[indOfGoodCell].GetComponent<RectTransform>().rect.width / 3 * 2;
-                bestPos.y += cells[indOfGoodCell].GetComponent<RectTransform>().rect.height / 3 * 2;
-                float width = transform.GetComponent<Renderer>().bounds.size.x;
-                float height = transform.GetComponent<Renderer>().bounds.size.y;
-                bestPos = new Vector3(bestPos.x + width / 2, bestPos.y - height / 2, bestPos.z);
-                transform.position = bestPos;
+                if (minDistance < 2.5f)
+                {
+                    var bestPos = cells[indOfGoodCell].transform.position;
+                    bestPos.x -= cells[indOfGoodCell].GetComponent<RectTransform>().rect.width / 3 * 2;
+                    bestPos.y += cells[indOfGoodCell].GetComponent<RectTransform>().rect.height / 3 * 2;
+                    float width = transform.GetComponent<Renderer>().bounds.size.x;
+                    float height = transform.GetComponent<Renderer>().bounds.size.y;
+                    bestPos = new Vector3(bestPos.x + width / 2, bestPos.y - height / 2, bestPos.z);
+                    transform.position = bestPos;
+                }
             }
         }
 
         private void Update()
         {
-            if (isDragging)
+            if (!transform.parent.name.Equals("LightField") && !transform.parent.name.Equals("DarkField"))
             {
-                Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position;
-                transform.Translate(mousePosition, Space.World);
+                if (isDragging)
+                {
+                    Vector2 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition) - transform.position;
+                    transform.Translate(mousePosition, Space.World);
+                }
             }
         }
 
