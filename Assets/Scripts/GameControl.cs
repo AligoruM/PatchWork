@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using System.Collections;
+using UnityEngine.SceneManagement;
 
 namespace Assets.Scripts
 {
@@ -541,6 +542,11 @@ namespace Assets.Scripts
         private int getNumberOfFinalPoints(Player player)
         {
             return player.numberOfButtons - 2 * player.numberOfEmptyCells;
+        }
+
+        public void Restart()
+        {
+            SceneManager.LoadScene("PatchWorkScene");
         }
     }
 }
