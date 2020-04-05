@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using Assets.Scripts;
+using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -17,6 +18,7 @@ public class ButtonPopupScript : MonoBehaviour
     public void Setup(int amount)
     {
         textMesh.SetText("+" + amount);
+        textMesh.faceColor = StaticVariables.player1IsActive ? new Color32(229, 62, 123, 255) : new Color32(59, 123, 191, 255);
     }
     // Start is called before the first frame update
     void Start()

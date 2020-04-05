@@ -12,12 +12,14 @@ namespace Assets.Scripts
 
         public int buttonsOnTile;
 
+        public int tileSize;
+
         public bool isUsed;
 
         public bool isActive;
 
         public Tile(int buttonCost, int progressCost, 
-            int buttonsOnTile, GameObject tileObject)
+            int buttonsOnTile, GameObject tileObject, int tileSize)
         {
             this.buttonCost = buttonCost;
             this.progressCost = progressCost;
@@ -25,6 +27,7 @@ namespace Assets.Scripts
             this.tileObject = tileObject;
             this.isUsed = false;
             this.isActive = false;
+            this.tileSize = tileSize;
         }
     }
 }
