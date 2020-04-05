@@ -1,5 +1,5 @@
 # PatchWork
-Скрипты игры находятся в папке Assets/Scripts
+Скрипты игры находятся в папке Assets/Scripts.  
 Финальная версия игры в формате .apk файла доступна по ссылке:
 https://drive.google.com/open?id=17klgtrNF7j2NR4pl7VfIGLNjh7oyyQr3
 
