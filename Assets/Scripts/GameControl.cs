@@ -361,55 +361,66 @@ namespace Assets.Scripts
             var acceptTile = avaiableTiles.Where(tile => tile.isActive).First();
 
             // Check limits of placement
-
-            if (StaticVariables.player1IsActive)
+            ContactFilter2D filter = new ContactFilter2D();
+            List<Collider2D> hitNodes = new List<Collider2D>(32);
+            Physics2D.OverlapCollider(acceptTile.tileObject.GetComponent<CompositeCollider2D>(), filter, hitNodes);
+            if (hitNodes.Count() > 0)
             {
-                if (acceptTile.buttonCost > player1.numberOfButtons)
-                {
-                    warningMessage.SetActive(true);
-                    warningText.text = $"Warning\nYou don't have enough buttons to put this tile!";
-                }
-                else
-                {
-                    // If all good
-                    ChangeFirstAvailableTile(deltaPos);
-                    tileMovementSection.SetActive(false);
-                    player1.numberOfButtons -= acceptTile.buttonCost;
-                    player1.position += acceptTile.progressCost;
-                    player1.numberOfButtonsOnField += acceptTile.buttonsOnTile;
-                    acceptTile.isUsed = true;
-                    acceptTile.isActive = false;
-                    acceptTile.tileObject.transform.SetParent(lightField.transform);
-
-                    ShowScoreField();
-                    stageOfPlayerMove = 3;
-                    timeFieldGrid.GetComponent<TimeFieldGrid>().MoveActivePlayer(acceptTile.progressCost);
-                    player1.numberOfEmptyCells -= acceptTile.tileSize;
-                }
+                warningMessage.SetActive(true);
+                warningText.text = $"Warning\nThis tile overlap another tile!";
             }
             else
             {
-                if (acceptTile.buttonCost > player2.numberOfButtons)
+
+                if (StaticVariables.player1IsActive)
                 {
-                    warningMessage.SetActive(true);
-                    warningText.text = $"Warning\nYou don't have enough buttons to put this tile!";
+                    if (acceptTile.buttonCost > player1.numberOfButtons)
+                    {
+                        warningMessage.SetActive(true);
+                        warningText.text = $"Warning\nYou don't have enough buttons to put this tile!";
+                    }
+                    else
+                    {
+                        // If all good
+                        ChangeFirstAvailableTile(deltaPos);
+                        tileMovementSection.SetActive(false);
+                        player1.numberOfButtons -= acceptTile.buttonCost;
+                        player1.position += acceptTile.progressCost;
+                        player1.numberOfButtonsOnField += acceptTile.buttonsOnTile;
+                        acceptTile.isUsed = true;
+                        acceptTile.isActive = false;
+                        acceptTile.tileObject.transform.SetParent(lightField.transform);
+
+                        ShowScoreField();
+                        stageOfPlayerMove = 3;
+                        timeFieldGrid.GetComponent<TimeFieldGrid>().MoveActivePlayer(acceptTile.progressCost);
+                        player1.numberOfEmptyCells -= acceptTile.tileSize;
+                    }
                 }
                 else
                 {
-                    // If all good
-                    ChangeFirstAvailableTile(deltaPos);
-                    tileMovementSection.SetActive(false);
-                    player2.numberOfButtons -= acceptTile.buttonCost;
-                    player2.position += acceptTile.progressCost;
-                    player2.numberOfButtonsOnField += acceptTile.buttonsOnTile;
-                    acceptTile.isUsed = true;
-                    acceptTile.isActive = false;
-                    acceptTile.tileObject.transform.SetParent(darkField.transform);
+                    if (acceptTile.buttonCost > player2.numberOfButtons)
+                    {
+                        warningMessage.SetActive(true);
+                        warningText.text = $"Warning\nYou don't have enough buttons to put this tile!";
+                    }
+                    else
+                    {
+                        // If all good
+                        ChangeFirstAvailableTile(deltaPos);
+                        tileMovementSection.SetActive(false);
+                        player2.numberOfButtons -= acceptTile.buttonCost;
+                        player2.position += acceptTile.progressCost;
+                        player2.numberOfButtonsOnField += acceptTile.buttonsOnTile;
+                        acceptTile.isUsed = true;
+                        acceptTile.isActive = false;
+                        acceptTile.tileObject.transform.SetParent(darkField.transform);
 
-                    ShowScoreField();
-                    stageOfPlayerMove = 3;
-                    timeFieldGrid.GetComponent<TimeFieldGrid>().MoveActivePlayer(acceptTile.progressCost);
-                    player2.numberOfEmptyCells -= acceptTile.tileSize;
+                        ShowScoreField();
+                        stageOfPlayerMove = 3;
+                        timeFieldGrid.GetComponent<TimeFieldGrid>().MoveActivePlayer(acceptTile.progressCost);
+                        player2.numberOfEmptyCells -= acceptTile.tileSize;
+                    }
                 }
             }
         }
