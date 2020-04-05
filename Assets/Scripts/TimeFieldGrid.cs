@@ -97,7 +97,7 @@ public class TimeFieldGrid : MonoBehaviour
             if (cellsWithButtons.Contains(playerButton.cellNum))
             {
                 int numberOfButtons = gameContoller.GetComponent<GameControl>().ActivePlayerGetButtonsFromField();
-                createButtonPopup(numberOfButtons, tmpCell);
+                CreateButtonPopup(numberOfButtons, tmpCell);
             }
             if (finishCells.Contains(playerButton.cellNum))
             {
@@ -190,7 +190,7 @@ public class TimeFieldGrid : MonoBehaviour
         }
     }
 
-    private ButtonPopupScript createButtonPopup(int amount, GameObject cell)
+    private ButtonPopupScript CreateButtonPopup(int amount, GameObject cell)
     {
         GameObject buttonPopup = Instantiate(buttonPopupPrefab);
         buttonPopup.GetComponent<Transform>().SetParent(cell.transform);
