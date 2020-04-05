@@ -18,9 +18,9 @@ namespace Assets.Scripts
     {
         public GameObject startNewGameWindow;
         public GameObject lightField, darkField, scoreField;
-        public GameObject selectTileCanvas, advanceCanvas, tileMovementSection, allTiles, warningMessage;
+        public GameObject selectTileCanvas, advanceCanvas, tileMovementSection, allTiles, warningMessage, winnerPopup;
         public GameObject[] tilesObjects;
-        public TextMeshProUGUI playerTurnText, numberOfRedButtons, numberOfBlueButtons, warningText;
+        public TextMeshProUGUI playerTurnText, numberOfRedButtons, numberOfBlueButtons, warningText, winnerText;
         public Fields fields;
         public GameObject timeFieldGrid;
         public GameObject playerButton;
@@ -54,15 +54,25 @@ namespace Assets.Scripts
             numberOfRedButtons.text = $"{player1.numberOfButtons}";
             numberOfBlueButtons.text = $"{player2.numberOfButtons}";
 
+            if (Input.GetKeyDown(KeyCode.F5))
+            {
+                player1.finishOfGame = true;
+                player2.finishOfGame = true;
+            }
+
             if (player1.finishOfGame && player2.finishOfGame)
             {
-                if (player1.numberOfButtons > player2.numberOfButtons)
+                if (getNumberOfFinalPoints(player1) > getNumberOfFinalPoints(player2))
                 {
                     playerTurnText.text = "Player 1 WIN!";
+                    playerTurnText.color = new Color32(229, 62, 123, 255);
+                    showWinPopup(player1, player2);
                 }
-                if (player2.numberOfButtons > player1.numberOfButtons)
+                if (getNumberOfFinalPoints(player2) > getNumberOfFinalPoints(player1))
                 {
                     playerTurnText.text = "Player 2 WIN!";
+                    playerTurnText.color = new Color32(59, 123, 191, 255);
+                    showWinPopup(player2, player1);
                 }
                 else
                 {
@@ -374,6 +384,7 @@ namespace Assets.Scripts
                     ShowScoreField();
                     stageOfPlayerMove = 3;
                     timeFieldGrid.GetComponent<TimeFieldGrid>().MoveActivePlayer(acceptTile.progressCost);
+                    player1.numberOfEmptyCells -= acceptTile.tileSize;
                 }
             }
             else
@@ -398,6 +409,7 @@ namespace Assets.Scripts
                     ShowScoreField();
                     stageOfPlayerMove = 3;
                     timeFieldGrid.GetComponent<TimeFieldGrid>().MoveActivePlayer(acceptTile.progressCost);
+                    player2.numberOfEmptyCells -= acceptTile.tileSize;
                 }
             }
         }
@@ -507,5 +519,17 @@ namespace Assets.Scripts
             }
         }
 
+        private void showWinPopup(Player winner, Player looser)
+        {
+            winnerPopup.SetActive(true);
+            winnerText.text = string.Format("VICTORY!\n {0} win this game\nwith {1} points\nagainst {2} opponent's points", 
+                winner == player1 ? "Player1" : "Player2", getNumberOfFinalPoints(winner), getNumberOfFinalPoints(looser));
+            winnerText.color = winner == player1 ? new Color32(229, 62, 123, 255) : new Color32(59, 123, 191, 255);
+        }
+
+        private int getNumberOfFinalPoints(Player player)
+        {
+            return player.numberOfButtons - 2 * player.numberOfEmptyCells;
+        }
     }
 }
