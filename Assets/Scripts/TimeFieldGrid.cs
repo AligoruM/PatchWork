@@ -37,7 +37,8 @@ public class TimeFieldGrid : MonoBehaviour
                               35};
 
     private int[] cellsWithLeather = { 22, 29, 36, 49, 56 };
-    private int[] cellsWithButtons = { 7, 13, 19, 26, 33, 39, 45, 53, 60 };
+    private int[] cellsWithButtons = { 7, 13, 19, 26, 33, 40, 46, 53, 60 };
+    private int[] finishCells = { 60, 61, 62, 63 };
 
     private GameObject player1;
     private GameObject player2;
@@ -51,18 +52,7 @@ public class TimeFieldGrid : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.D))
-        {
-            GameObject playerToMove = StaticVariables.player1IsActive ? player1 : player2; 
-            if (!playerToMove.GetComponent<PlayerButton>().isMoving)
-            {
-                int currentCell = playerToMove.GetComponent<PlayerButton>().cellNum;
-                if (currentCell < 63)
-                {
-                    StartCoroutine(SmoothMove(playerToMove, 2));
-                }
-            }
-        }
+        
     }
 
     public void MoveActivePlayer(int cellCount)
@@ -75,6 +65,14 @@ public class TimeFieldGrid : MonoBehaviour
             {
                 StartCoroutine(SmoothMove(playerToMove, cellCount));
             }
+            else
+            {
+                StartCoroutine(WaitAndDisableTimeFeild(timeBeforeDisable, playerToMove));
+            }
+        }
+        else
+        {
+            StartCoroutine(WaitAndDisableTimeFeild(timeBeforeDisable, playerToMove));
         }
     }
 
@@ -100,6 +98,10 @@ public class TimeFieldGrid : MonoBehaviour
             {
                 int numberOfButtons = gameContoller.GetComponent<GameControl>().ActivePlayerGetButtonsFromField();
                 createButtonPopup(numberOfButtons, tmpCell);
+            }
+            if (finishCells.Contains(playerButton.cellNum))
+            {
+                gameContoller.GetComponent<GameControl>().ActivePlayerRichFinish();
             }
             if (cellCount > 1)
             {
@@ -132,12 +134,12 @@ public class TimeFieldGrid : MonoBehaviour
         yield return new WaitForSeconds(time);
         player.GetComponent<PlayerButton>().isMoving = false;
         DisableField();
-        gameContoller.GetComponent<GameControl>().PassTurnToAnotherPlayer();
     }
 
     private void DisableField()
     {
         gameContoller.GetComponent<GameControl>().HideScoreField();
+        gameContoller.GetComponent<GameControl>().PassTurnToAnotherPlayer();
     }
 
 
